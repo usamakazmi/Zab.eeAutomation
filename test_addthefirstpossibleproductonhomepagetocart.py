@@ -73,7 +73,8 @@ class DuckDuckGoSearchPage:
     URL2 = 'http://zabee-env.jsmhwy6kip.us-east-1.elasticbeanstalk.com/account'
     URL3 = 'http://zabee-env.jsmhwy6kip.us-east-1.elasticbeanstalk.com'
     URL4 = 'http://zabee-env.jsmhwy6kip.us-east-1.elasticbeanstalk.com/cart'
-
+    URL5 = 'http://zabee-env.jsmhwy6kip.us-east-1.elasticbeanstalk.com/checkout?c=1'
+    URL6 = 'http://zabee-env.jsmhwy6kip.us-east-1.elasticbeanstalk.com/checkout/payment'
     #locators
     SEARCH_INPUT = (By.ID, 'l_user_email')
     SEARCH_INPUT2 = (By.ID, 'l_user_pass')
@@ -100,6 +101,13 @@ class DuckDuckGoSearchPage:
 
     def gotocartpage(self):
         self.browser.get(self.URL4)
+    
+    def gotoshippingpage(self):
+        self.browser.get(self.URL5)
+
+    def gotopaymentpage(self):
+        self.browser.get(self.URL6)
+
 
     def search(self,phrase):
         search_input = self.browser.find_element(*self.SEARCH_INPUT)
@@ -138,6 +146,12 @@ class DuckDuckGoResultPage:
     opencartsidebar = (By.XPATH, "//div[@class='flip-card-back']/a[contains (text(), 'Cart' ) ]")
     openusersidebar = (By.XPATH, "//div[@class='flip-card-back']/a[@class='flipBtn sidebar-dropdown-toggle']")
     
+    gotocheckoutusingsidebarcart = (By.XPATH, "//div[@class='minicart']/a[2]/input[@value='Checkout']")
+    isoncheckoutpage = (By.XPATH, "//div[@class='row breadcrumb-row']/div[@class='col-sm-12 pl-3 p-2']/span[1]/a[contains (text(), 'Home' ) ]")
+    
+    iswhereoncheckoutpage = (By.XPATH, "//div[@class='row breadcrumb-row']/div[@class='col-sm-12 pl-3 p-2']/span[1]/a[@class='breacrumb-latter-color']")
+    #findnextbuttonshipping = (By.XPATH, "//a[contains (text(), 'Next' ) ]")
+    findnextbutton = (By.XPATH, "//a[@class='btn btn-primary ml-3 toPayment rounded-0']")
     
     def __init__(self, browser):
         self.browser = browser
@@ -186,10 +200,9 @@ class DuckDuckGoResultPage:
     def addtocartonproductdetailpageTest(self):
         #self.browser.implicitly_wait(30)
         #search_input = WebDriverWait(self.browser, 20).until(find)
+        #this sleep is crucial
         time.sleep(1)
         search_input = self.browser.find_element(*self.addtocartonproductdetailpage)
-        
-        
         ActionChains(self.browser).move_to_element(search_input).click().perform()  
         #search_input.send_keys(Keys.RETURN)
         return search_input.text
@@ -197,12 +210,61 @@ class DuckDuckGoResultPage:
     def opencartsidebarTest(self):
         search_input = self.browser.find_element(*self.opencartsidebar)
         ActionChains(self.browser).move_to_element(search_input).click().perform()
-        time.sleep(1)
-        
+        #time.sleep(1)
+
     def openusersidebarTest(self):
         search_input = self.browser.find_element(*self.openusersidebar)
         ActionChains(self.browser).move_to_element(search_input).click().perform()
-        time.sleep(1)
+        #time.sleep(1)
+   
+    def gotocheckoutusingsidebarcartTest(self):
+        search_input = self.browser.find_element(*self.gotocheckoutusingsidebarcart)
+        #ActionChains(self.browser).move_to_element(search_input).click().perform()
+        search_input.send_keys(Keys.RETURN)
+        
+        search_input = self.browser.find_element(*self.isoncheckoutpage)
+        #time.sleep(1)
+        #return search_input.get_attribute("value")
+        return search_input.text
+
+
+    def confirmorderoncheckoutpageTest(self):
+
+        search_input = self.browser.find_element(*self.iswhereoncheckoutpage)
+        
+        if search_input.text == "Checkout":
+            search_input = self.browser.find_element(*self.findnextbutton)
+            search_input.send_keys(Keys.RETURN)
+            
+            if search_input.text == "Payment":
+                search_input = self.browser.find_element(*self.findnextbutton)
+                search_input.send_keys(Keys.RETURN)
+            elif search_input.text == "Confirm Order":
+                return "Checkout"
+           
+
+        elif search_input.text == "Payment":
+            search_input = self.browser.find_element(*self.findnextbutton)
+            search_input.send_keys(Keys.RETURN)
+
+            return "Payment"
+
+        else:
+            return "Confirm Order"
+            
+    def onshippingpageclicknextbuttonTest(self):
+        search_input = self.browser.find_element(*self.findnextbutton)
+        search_input.send_keys(Keys.RETURN)
+        
+        search_input = self.browser.find_element(*self.findnextbutton)
+        search_input.send_keys(Keys.RETURN)
+        
+            
+        
+
+
+
+
 
     def title(self):
         return self.browser.title
@@ -225,54 +287,17 @@ def test_basic_duckduckgo_search(browser):
     result_page = DuckDuckGoResultPage(browser)
     #PHRASE = "panda"
 #These are the login Credentials
-    phrase1 = 'qa6.kaygees@gmail.com'
+    phrase1 = 'qa5.kaygees@gmail.com'
     phrase2 = 'admin123'
     search_page.load()
     
 #Inserting login credentials and Logging in
     search_page.search(phrase1)
-    search_page.search2(phrase2)
+    search_page.search2(phrase2)    
     
-    
-#Checking if user is logged in
-    # search_page.loginCheck()
-    # find = "Profile"
-    # temp = result_page.loginTest()
-    # assert find == temp
-    # browser.implicitly_wait(10)
-    # search_page.gotohomepage()
-       
 #Adding the first possible product to cart
-    # temp = result_page.addtocartTest()
-    # assert temp[0] == "$"
-    # browser.implicitly_wait(10)   
-    # search_page.gotohomepage()
+    temp = result_page.addtocartTest()
+    assert temp[0] == "$"
+    browser.implicitly_wait(10)   
+    search_page.gotohomepage()
   
-#Adding the 1st possible product to wishlist
-    # temp = result_page.addtowishlistTest()
-    # assert temp == "Save"
-    # browser.implicitly_wait(10)   
-    # search_page.gotohomepage()
-    
-#Going to product detail page of 1st product
-    #temp = result_page.gotoproductdetailpageTest()
-    #assert temp == "Home"
-    #browser.implicitly_wait(10)   
-        #search_page.gotohomepage()
-    
-#Adding to cart on product detail page
-    #temp = result_page.addtocartonproductdetailpageTest()
-    #assert temp == "Add to Cart"
-    #browser.implicitly_wait(10)   
-    
-#Go to /cart page
-    #search_page.gotocartpage()
-
-#Open sidebar User
-    result_page.openusersidebarTest()
-    search_page.gotohomepage() 
-
-#Open sidebar Cart    
-    result_page.opencartsidebarTest()
-    search_page.gotohomepage() 
-

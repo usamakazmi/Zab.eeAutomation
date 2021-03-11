@@ -260,12 +260,7 @@ class DuckDuckGoResultPage:
         
         search_input = self.browser.find_element(*self.findnextbutton)
         search_input.send_keys(Keys.RETURN)
-
-    def onpaymentpageclicknextbuttonTest(self):
-        search_input = self.browser.find_element(*self.findnextbutton)
-        search_input.send_keys(Keys.RETURN)
-    
-
+        
             
         
 
@@ -302,81 +297,20 @@ def test_basic_duckduckgo_search(browser):
     search_page.search(phrase1)
     search_page.search2(phrase2)
     
-    
-#Checking if user is logged in
-    search_page.loginCheck()
-    find = "Profile"
-    temp = result_page.loginTest()
-    assert find == temp
-    browser.implicitly_wait(10)
+#Adding the first possible product to cart
+    temp = result_page.addtocartTest()
+    assert temp[0] == "$"
+    browser.implicitly_wait(10)   
     search_page.gotohomepage()
-       
-# #Adding the first possible product to cart
-#     temp = result_page.addtocartTest()
-#     assert temp[0] == "$"
-#     browser.implicitly_wait(10)   
-#     search_page.gotohomepage()
-  
-##Adding the 1st possible product to wishlist
-    # temp = result_page.addtowishlistTest()
-    # assert temp == "Save"
-    # browser.implicitly_wait(10)   
-    # search_page.gotohomepage()
+
+#Open sidebar Cart and checkout through shipping page  
+    result_page.opencartsidebarTest()
+    temp = result_page.gotocheckoutusingsidebarcartTest()
+    assert temp == "Home"
+        #time.sleep(0.5)
+    search_page.gotoshippingpage()
+    temp = result_page.confirmorderoncheckoutpageTest()
+    assert temp == "Checkout"
+        #time.sleep(1)
+
     
-##Going to product detail page of 1st product
-    #temp = result_page.gotoproductdetailpageTest()
-    #assert temp == "Home"
-    #browser.implicitly_wait(10)   
-        #search_page.gotohomepage()
-    
-##Adding to cart on product detail page
-    #temp = result_page.addtocartonproductdetailpageTest()
-    #assert temp == "Add to Cart"
-    #browser.implicitly_wait(10)   
-    
-##Go to /cart page
-    #search_page.gotocartpage()
-
-##Open sidebar User
-    #result_page.openusersidebarTest()
-    #search_page.gotohomepage() 
-
-##Open sidebar Cart    
-    # result_page.opencartsidebarTest()
-    # search_page.gotohomepage() 
-
-# #Open sidebar Cart and checkout
-#     result_page.opencartsidebarTest()
-#     temp = result_page.gotocheckoutusingsidebarcartTest()
-#     assert temp == "Home"
-#     temp = result_page.confirmorderoncheckoutpageTest()
-#     assert temp == "Confirm Order"
-#         #time.sleep(1)
-
-# #Open sidebar Cart and checkout through shipping page  
-#     result_page.opencartsidebarTest()
-#     temp = result_page.gotocheckoutusingsidebarcartTest()
-#     assert temp == "Home"
-#         #time.sleep(0.5)
-#     search_page.gotoshippingpage()
-#     temp = result_page.confirmorderoncheckoutpageTest()
-#     assert temp == "Checkout"
-#         #time.sleep(1)
-
-##Open sidebar Cart and checkout through payment page  
-    # result_page.opencartsidebarTest()
-    # temp = result_page.gotocheckoutusingsidebarcartTest()
-    # assert temp == "Home"
-    #     #time.sleep(0.5)
-    # search_page.gotopaymentpage()
-    # temp = result_page.confirmorderoncheckoutpageTest()
-    # assert temp == "Payment"    
-    #     #time.sleep(1)
-
-##Goto shipping page and click next button
-    #search_page.gotoshippingpage()
-    #result_page.onshippingpageclicknextbuttonTest()
-
-##Goto payment page and click next button
-    #search_page.gotopaymentpage()
-    #result_page.onpaymentpageclicknextbuttonTest()

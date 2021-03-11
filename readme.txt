@@ -13,7 +13,9 @@ loading problems.
 
 pytest -s -v -n=2
 
-3)config.json file contains name of browser and wait duration
+3)config.json file contains name of browser and wait duration.
 
 4) test_example1.py contains all test cases together but they are commented, 
 every other file contains a single test case.
+
+5) udemo.py and uFirstCode.py don't work and don't matter ignore them.

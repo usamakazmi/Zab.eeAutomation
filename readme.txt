@@ -8,7 +8,8 @@ pytest -q test_example1.py
 #This command runs all test_XYZ.py files but only 2 at the same time,
 by changing -n=? you can increase number of testcases at a time,
 however increasing this value too much can result in failed test cases,
-reason for this is net performance or pc performance.
+reason for this is net performance or pc performance, which causes page
+loading problems.
 
 pytest -s -v -n=2
 
